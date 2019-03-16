@@ -8,9 +8,7 @@ public class doorHandler : MonoBehaviour {
 	public GameObject center;
 	public float speed;
 	public bool open;
-	public bool needs2Buttons;
 	public GameObject button;
-	public GameObject button2;
 	float startY;
 	float startX;
 	float startZ;
@@ -52,16 +50,8 @@ public class doorHandler : MonoBehaviour {
 	}
 	// Update is called once per frame
 	void Update () {
-		
-		if (needs2Buttons == true) {
-			if (button.gameObject.GetComponent<Button> ().pressed == true && button2.gameObject.GetComponent<Button> ().pressed == true) {
-				open = true;
-			} else {
-				open = false;
-			}
-		} else {
-			open = button.gameObject.GetComponent<Button>().pressed;
-		}
+		open = button.gameObject.GetComponent<Button>().pressed;
+
 		if (open == true){
 			Open();
 		}else{
