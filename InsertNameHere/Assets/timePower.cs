@@ -40,5 +40,6 @@ public class timePower : MonoBehaviour {
 	void Update () {
 		play ();
 		record ();
+
 	}
 }

@@ -3,14 +3,19 @@ using System.Collections;
 
 public class PickupObject : MonoBehaviour {
 	GameObject mainCamera;
+	GameObject player;
+
 	bool carrying;
 	GameObject carriedObject;
 	public float distance;
 	public float smooth;
 	public float minDist;
+	int ignoreTimer = 0;
+	bool isIgnoring = false;
 	// Use this for initialization
 	void Start () {
 		mainCamera = GameObject.FindWithTag("MainCamera");
+		player = GameObject.FindWithTag ("Player");
 	}
 	
 	// Update is called once per frame
@@ -21,6 +26,13 @@ public class PickupObject : MonoBehaviour {
 			//rotateObject();
 		} else {
 			pickup();
+		}
+		if (isIgnoring == true) {
+			ignoreTimer++;
+			if (ignoreTimer > 10) {
+				isIgnoring = false;
+				Physics.IgnoreCollision(carriedObject.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+			}
 		}
 	}
 
@@ -46,7 +58,9 @@ public class PickupObject : MonoBehaviour {
 					carrying = true;
 					carriedObject = p.gameObject;
 					//p.gameObject.rigidbody.isKinematic = true;
+					carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
 					p.gameObject.GetComponent<Rigidbody>().useGravity = false;
+					carriedObject.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (0.0f,0.0f,0.0f);
 				}
 			}
 		}
@@ -60,8 +74,12 @@ public class PickupObject : MonoBehaviour {
 
 	void dropObject() {
 		carrying = false;
-		//carriedObject.gameObject.rigidbody.isKinematic = false;
-		carriedObject.gameObject.GetComponent<Rigidbody>().useGravity = true;
-		carriedObject = null;
+		carriedObject.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+		carriedObject.gameObject.GetComponent<Rigidbody> ().useGravity = true;
+		carriedObject.gameObject.GetComponent<Rigidbody> ().velocity = new Vector3 (0.0f,0.0f,0.0f);
+		Physics.IgnoreCollision(carriedObject.GetComponent<Collider>(), player.GetComponent<Collider>());
+		carriedObject.gameObject.GetComponent<Rigidbody> ().velocity = carriedObject.gameObject.GetComponent<Rigidbody> ().velocity * 0.0f;
+		isIgnoring = true;
+		ignoreTimer = 0;
 	}
 }
