@@ -8,7 +8,10 @@ public class doorHandler : MonoBehaviour {
 	public GameObject center;
 	public float speed;
 	public bool open;
+	public bool open2;
+	public bool twoButtons;
 	public GameObject button;
+	public GameObject button2;
 	float startY;
 	float startX;
 	float startZ;
@@ -52,10 +55,20 @@ public class doorHandler : MonoBehaviour {
 	void Update () {
 		open = button.gameObject.GetComponent<Button>().pressed;
 
-		if (open == true){
-			Open();
-		}else{
-			Close();
+		if (twoButtons == true) {
+			open2 = button2.gameObject.GetComponent<Button>().pressed;
+			if (open == true && open2 == true) {
+				Open ();
+			} else {
+				Close ();
+			}
+		} else {
+			if (open == true) {
+				Open ();
+			} else {
+				Close ();
+			}
 		}
+
 	}
 }
